@@ -7,17 +7,24 @@ Test cases for extracting parameters with HTMLParser
 import unittest
 
 from lxml import etree
-from form_parser import HTMLForm, HTMLExtractor, config
+from formparser import HTMLParser, HTMLExtractor
+from formparser import utils
 
+PORTAL_COMPRAS = 'https://www1.compras.mg.gov.br/processocompra/processo/consultaProcessoCompra.html'
+TEST_FORM_FIELD = {'type': 'text', 'name': 'codigoUnidadeCompra', 'maxlength': '7', 'size': '', 'value': '',
+                   'onkeydown': ' return IsNumericKey(event, false);', 'onkeyup':
+                       'return numericMask(this,0,7,false, event, false );testarBackspaceEDelete();',
+                   'onkeypress': 'campoAlterado();', 'onchange': 'campoAlterado();',
+                   'onblur': 'numericValidate(this,0,7,false,false);', 'id': 'codigoUnidadeCompra', 'class': ''}
 
-HTML = HTMLExtractor(config.PORTAL_COMPRAS)
-Form = HTMLForm(HTML.get_forms()[0])
+HTML = HTMLExtractor(PORTAL_COMPRAS)
+Form = HTMLParser(HTML.get_forms()[0])
 
 
 class TestPortalCompras(unittest.TestCase):
     def test_request_headers(self):
-        headers = config.request_headers()
-        self.assertIn(headers['User-Agent'], config.USER_AGENT_LIST)
+        headers = utils.request_headers()
+        self.assertIn(headers['User-Agent'], utils.USER_AGENT_LIST)
 
     def test_html_response(self):
         self.assertEqual(HTML.html_response.status_code, 200)
@@ -36,6 +43,9 @@ class TestPortalCompras(unittest.TestCase):
 
     def test_number_of_forms(self):
         self.assertIs(len(HTML.get_forms()), 1)
+
+    def test_check_for_string(self):
+        self.assertIs(HTML.check_for_string('Ocultar pesquisa'), True)
 
 
 class TestFormPortalCompras(unittest.TestCase):
@@ -62,7 +72,7 @@ class TestFormPortalCompras(unittest.TestCase):
 
     def test_list_field_attributes(self):
         field = Form.fields()['text'][0]
-        self.assertEqual(Form.list_field_attributes(field), config.TEST_FORM_FIELD)
+        self.assertEqual(Form.list_field_attributes(field), TEST_FORM_FIELD)
 
 
 if __name__ == '__main__':

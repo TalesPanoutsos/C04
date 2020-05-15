@@ -7,7 +7,7 @@ Parse form parameters from HTML
 from collections import defaultdict
 
 
-class HTMLForm:
+class Parser:
     """Parse HTML forms"""
     def __init__(self, form):
         """Constructor for HTMLForm

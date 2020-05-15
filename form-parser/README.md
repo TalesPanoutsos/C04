@@ -5,7 +5,7 @@ Form parser module for web crawling.
 
 #### URLParser
 ```
-from form_parser import URLParser
+from formparser import URLParser
 Parser = URLParser("myurl.com/param=value1&param2=value2")
 Parser.query() # param1=value1&param2=value2
 Parser.parameters() # {'param1': 'value1', 'param2': 'value2'}
@@ -14,7 +14,7 @@ Parser.parameters() # {'param1': 'value1', 'param2': 'value2'}
 - Extracts parameters from HTML forms using lxml.etree and XPaths
 #### HTMLParser
 ```
-from form_parser import HTMLExtractor, HTMLForm
+from formparser import HTMLExtractor, HTMLParser
 HTML = HTMLExtractor("myurl.com/param=value1&param2=value2")
 form_list = HTML.get_forms()
 for form in form_list:
@@ -67,5 +67,6 @@ Note: also works for other types of ```<Element>``` objects
 ### TODO
 - [ ] Parse custom format types
 - [ ] Extract and parse non-HTML forms
-- [ ] Find void select options
+- [ ] Find select options to be ignored (e.g. "Selecione")
 - [ ] Increase test coverage 
+- [ ] Identify dynamic form fields
